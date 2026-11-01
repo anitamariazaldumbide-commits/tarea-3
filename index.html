@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ExpoEmprende IA 360° - Punto de Equilibrio</title>
+<style>
+:root{
+  --bg:#edf7f8;
+  --card:#ffffff;
+  --ink:#153443;
+  --muted:#5b7280;
+  --line:#dbeaec;
+  --pri:#0a8b8b;
+  --pri2:#0f5a6d;
+  --gold:#f3b63f;
+  --soft:#effcfc;
+  --good:#157f5b;
+  --warn:#c47c12;
+  --bad:#bf3c4b;
+  --shadow:0 12px 30px rgba(19,52,67,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#eff9fb 0,#edf7f8 30%,#f8fbfc 100%)}
+a{color:var(--pri2)}
+header{padding:28px 18px;background:linear-gradient(135deg,#0f4d60 0,#0a8b8b 100%);color:white;position:sticky;top:0;z-index:20;box-shadow:0 10px 20px rgba(0,0,0,.08)}
+.hero{max-width:1280px;margin:auto;display:grid;grid-template-columns:1.4fr .9fr;gap:20px;align-items:center}
+.hero h1{margin:0 0 10px;font-size:clamp(1.7rem,2.6vw,2.8rem);line-height:1.05}
+.hero p{margin:0;color:#daf5f4;max-width:760px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.badge{padding:7px 10px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:999px;font-size:.86rem}
+.quick{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.14);padding:16px;border-radius:18px}
+.quick strong{display:block;font-size:1.5rem}
+main{max-width:1280px;margin:auto;padding:18px}
+.tabs{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 18px}.tabs button{border:1px solid var(--line);background:white;padding:12px 15px;border-radius:14px;font-weight:800;color:var(--ink);cursor:pointer;box-shadow:var(--shadow)}.tabs button.active{background:linear-gradient(135deg,var(--pri2),var(--pri));color:white;border-color:transparent}
+.pane{display:none}.pane.active{display:block}
+.grid{display:grid;gap:18px}.cols-2{grid-template-columns:360px 1fr}.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1050px){.hero,.cols-2,.cols-3,.cols-4{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:22px;padding:18px;box-shadow:var(--shadow);border:1px solid #edf4f5}
+.card h2,.card h3{margin:0 0 12px}.small{font-size:.92rem;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}@media(max-width:900px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.kpis{grid-template-columns:1fr}}
+.kpi{background:var(--soft);border-left:5px solid var(--pri);padding:14px;border-radius:14px}.kpi .label{font-size:.88rem;color:var(--muted)}.kpi .value{font-size:1.35rem;font-weight:900;margin-top:4px}
+.field{margin-bottom:14px}.field label{font-weight:800;display:flex;justify-content:space-between;gap:10px;margin-bottom:6px} input[type=range]{width:100%;accent-color:var(--pri)}
+.stage{position:relative;overflow:hidden;min-height:540px;background:#d8eef1;border-radius:22px;border:2px solid #dceef0}.stage video,.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.stage video{display:none}
+.overlay{position:absolute;inset:0;pointer-events:none}
+.hud{position:absolute;top:16px;left:16px;display:flex;gap:10px;flex-wrap:wrap}
+.hud .pill{background:rgba(9,36,46,.82);color:white;padding:8px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(4px);font-size:.88rem;font-weight:800}
+.panel{position:absolute;right:18px;top:18px;max-width:315px;background:rgba(6,35,45,.84);color:white;padding:16px;border-radius:18px;border:2px solid rgba(0,255,220,.28);box-shadow:0 12px 28px rgba(0,0,0,.25);backdrop-filter:blur(5px)}
+.panel .eyebrow{color:#c0efea;font-size:.84rem}.panel .big{font-size:1.95rem;font-weight:900;line-height:1;margin:7px 0;color:#9fffee}.panel .line{font-size:.93rem;color:#e4f6f6;margin:4px 0}
+.tag{position:absolute;background:rgba(255,255,255,.94);padding:9px 11px;border-radius:14px;font-weight:800;color:#143443;border:1px solid rgba(10,139,139,.18);box-shadow:0 8px 20px rgba(0,0,0,.10)}.tag::after{content:"";position:absolute;width:2px;background:rgba(255,255,255,.94)}
+.t1{left:9%;top:22%}.t1::after{height:75px;left:26px;top:100%}.t2{left:12%;bottom:14%}.t2::after{height:70px;left:28px;bottom:100%}.t3{right:10%;bottom:18%}.t3::after{height:72px;left:34px;bottom:100%}
+.controls{display:flex;flex-wrap:wrap;gap:10px}.controls button,.controls .upload{border:0;padding:11px 14px;border-radius:14px;font-weight:800;cursor:pointer;background:var(--pri);color:white}.controls button.secondary,.controls .upload.secondary{background:#eef6f7;color:var(--ink);border:1px solid var(--line)}.controls button.danger{background:var(--bad)}
+.status{margin-top:12px;padding:11px 13px;background:#f4fbfb;border:1px solid var(--line);border-radius:14px;color:var(--muted)}
+.hotspot-scene{position:relative;height:500px;overflow:hidden;border-radius:22px;background:linear-gradient(#d8f4fb 0 58%,#d9cfb3 58%)}
+.hotspot-scene .wall{position:absolute;left:12%;top:9%;width:76%;height:48%;background:linear-gradient(#f2f2de,#c9e2dc);border:10px solid #7aa3a3;box-shadow:0 0 0 150px rgba(10,75,80,.08) inset}
+.hotspot-scene .banner{position:absolute;left:24%;top:13%;width:52%;background:#104f61;color:white;text-align:center;padding:10px;border-radius:6px;font-weight:900}
+.hotspot-scene .stand{position:absolute;left:24%;right:24%;top:50%;height:24%;background:linear-gradient(#efb35b 0 36%,#7a4422 37%);border:8px solid #9c6233;border-radius:10px;box-shadow:0 25px 22px rgba(0,0,0,.18)}
+.hotspot-scene .emoji{position:absolute;font-size:74px;left:46%;top:36%}
+.hotspot-scene .hs{position:absolute;width:34px;height:34px;border-radius:50%;border:3px solid white;background:var(--gold);box-shadow:0 0 0 8px rgba(243,182,63,.24);cursor:pointer;display:grid;place-items:center;font-weight:900;color:#5a3b06}
+.hotspot-scene .hs[data-id="1"]{left:20%;top:34%}.hotspot-scene .hs[data-id="2"]{left:30%;top:69%}.hotspot-scene .hs[data-id="3"]{right:17%;top:66%}.hotspot-scene .hs[data-id="4"]{right:22%;top:28%}
+.info-box{margin-top:14px;padding:14px;background:#fffaf0;border:1px solid #f4ddb0;border-radius:14px}
+.slidewrap{display:grid;grid-template-columns:1fr 1.1fr;gap:18px;align-items:stretch}@media(max-width:1000px){.slidewrap{grid-template-columns:1fr}}
+.slidebox{position:relative;min-height:380px;border-radius:22px;background:linear-gradient(135deg,#0f5a6d,#0a8b8b);color:white;padding:28px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}.slidebox:before{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.08);right:-80px;top:-40px}.slidebox:after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.08);left:-45px;bottom:-35px}.slidebox .num{font-size:.92rem;opacity:.88}.slidebox h3{font-size:1.8rem;margin:12px 0 12px;position:relative}.slidebox p,.slidebox ul{position:relative}
+.slide-actions{display:flex;gap:10px;flex-wrap:wrap}.slide-actions button{border:0;background:white;color:var(--pri2);font-weight:900;padding:10px 14px;border-radius:14px;cursor:pointer}
+.ai-chat{display:grid;grid-template-columns:1fr;gap:12px}.bubble{padding:13px 14px;border-radius:18px;line-height:1.45}.bubble.user{background:#edf9f9;border:1px solid #d7ecef}.bubble.ai{background:#fff7e5;border:1px solid #f0deb6}
+textarea,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:14px;font:inherit;color:var(--ink);background:white}
+.ai-output{min-height:150px}
+svg.chart{width:100%;height:auto;background:#fbfefe;border:1px solid #e5eff1;border-radius:18px}
+.storyboard{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}@media(max-width:900px){.storyboard{grid-template-columns:1fr}}
+.scene{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:white}.scene .thumb{height:130px;background:linear-gradient(135deg,#0f5a6d,#0a8b8b);position:relative}.scene .thumb::before{content:"";position:absolute;inset:18px;border-radius:16px;background:linear-gradient(180deg,#d9f1f7 0 56%,#d8cfb6 56% 100%)}.scene .thumb .mini{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:44px}.scene .body{padding:12px 14px}.scene .body strong{display:block;margin-bottom:8px}
+.tableish{width:100%;border-collapse:collapse}.tableish th,.tableish td{padding:10px 11px;border-bottom:1px solid var(--line);text-align:left}.tableish th{background:#f6fbfc}
+.callout{padding:14px 15px;border-radius:16px;background:#eefbfb;border-left:5px solid var(--pri)}
+.footer-note{font-size:.88rem;color:var(--muted);padding:18px 0;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <div class="hero">
+    <div>
+      <h1>ExpoEmprende IA 360°<br>Punto de equilibrio con realidad aumentada, simulación y asesor inteligente</h1>
+      <p>Prototipo integral para <strong>Emprendimiento y Gestión – Segundo BGU</strong>. Tema: <strong>punto de equilibrio</strong>, usando el caso de un emprendimiento escolar de <strong>sánduches</strong>. Diseñado para servir como maqueta del entorno, presentación interactiva, simulación, recurso con IA y storyboard de video.</p>
+      <div class="badges">
+        <span class="badge">Tema: punto de equilibrio</span>
+        <span class="badge">Caso: sánduches</span>
+        <span class="badge">Curso: Segundo BGU</span>
+        <span class="badge">Modo offline</span>
+        <span class="badge">Apto para GitHub Pages</span>
+      </div>
+    </div>
+    <div class="quick">
+      <div class="small">Escenario base</div>
+      <strong>PE = 40 unidades</strong>
+      <div class="small">Costos fijos: $60 · Costo variable: $1,50 · Precio de venta: $3,00</div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,.15);margin:14px 0">
+      <div class="small">Pregunta guía</div>
+      <div>¿Cuántos sánduches debemos vender para no perder dinero y comenzar a tomar decisiones responsables?</div>
+    </div>
+  </div>
+</header>
+<main>
+  <nav class="tabs" aria-label="Secciones principales">
+    <button class="active" data-pane="inicio">Inicio</button>
+    <button data-pane="presentacion">Presentación interactiva</button>
+    <button data-pane="maqueta">Maqueta del entorno</button>
+    <button data-pane="simulador">Simulación</button>
+    <button data-pane="visor">Visor RA</button>
+    <button data-pane="ia">Recurso con IA</button>
+    <button data-pane="storyboard">Storyboard / video</button>
+  </nav>
+
+  <section class="pane active" id="inicio">
+    <div class="grid">
+      <div class="card">
+        <h2>Propósito del recurso</h2>
+        <p>Este prototipo ayuda a que el estudiante no solo memorice una fórmula, sino que <strong>comprenda el punto de equilibrio como una herramienta real para tomar decisiones</strong>. Para ello, se integran visualización, exploración, simulación y retroalimentación inteligente.</p>
+        <div class="kpis">
+          <div class="kpi"><div class="label">Asignatura</div><div class="value">Emprendimiento y Gestión</div></div>
+          <div class="kpi"><div class="label">Nivel</div><div class="value">Segundo BGU</div></div>
+          <div class="kpi"><div class="label">Emprendimiento</div><div class="value">Venta de sánduches</div></div>
+          <div class="kpi"><div class="label">Meta de aprendizaje</div><div class="value">Calcular e interpretar el PE</div></div>
+        </div>
+      </div>
+      <div class="grid cols-3">
+        <div class="card"><h3>Maqueta del entorno</h3><p class="small">Una feria escolar virtual con puntos interactivos para reconocer costos, precio y decisiones del negocio.</p></div>
+        <div class="card"><h3>Presentación interactiva</h3><p class="small">Explicación guiada paso a paso del concepto, la fórmula y la interpretación del resultado.</p></div>
+        <div class="card"><h3>Simulación</h3><p class="small">Controles para modificar variables y observar ganancias, pérdidas y el punto de equilibrio en tiempo real.</p></div>
+        <div class="card"><h3>Visor aumentado</h3><p class="small">Superpone el resultado del punto de equilibrio sobre una imagen o sobre la cámara del dispositivo.</p></div>
+        <div class="card"><h3>Recurso con IA</h3><p class="small">Un asesor inteligente analiza el escenario y sugiere acciones de mejora para el emprendimiento.</p></div>
+        <div class="card"><h3>Storyboard</h3><p class="small">Guion visual listo para convertir este recurso en video demostrativo o presentación docente.</p></div>
+      </div>
+      <div class="card callout">
+        <strong>Escenario base del caso</strong><br>
+        En la feria escolar, el grupo invierte <strong>$60</strong> en costos fijos. Cada sánduche cuesta <strong>$1,50</strong> de elaborar y se venderá a <strong>$3,00</strong>. Con estos datos, el negocio necesita vender <strong>40 sánduches</strong> para alcanzar el punto de equilibrio.
+      </div>
+    </div>
+  </section>
+
+  <section class="pane" id="presentacion">
+    <div class="slidewrap">
+      <div class="slidebox">
+        <div>
+          <div class="num" id="slideNum">Diapositiva 1 de 5</div>
+          <h3 id="slideTitle"></h3>
+          <div id="slideBody"></div>
+        </div>
+        <div class="slide-actions">
+          <button id="prevSlide">◀ Anterior</button>
+          <button id="nextSlide">Siguiente ▶</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Guía docente</h2>
+        <table class="tableish">
+          <thead><tr><th>Momento</th><th>Actividad</th></tr></thead>
+          <tbody>
+            <tr><td>Inicio</td><td>Se presenta el caso del emprendimiento de sánduches y se activa una pregunta problemática: “¿Cuánto necesitamos vender para no perder?”</td></tr>
+            <tr><td>Desarrollo</td><td>Se explica la fórmula, se exploran los componentes y se comparan escenarios en el simulador.</td></tr>
+            <tr><td>Aplicación</td><td>El estudiante modifica precio, costos y ventas, y luego justifica una decisión con apoyo del asesor inteligente.</td></tr>
+            <tr><td>Cierre</td><td>Se contrasta la respuesta final con el punto de equilibrio y se elabora una recomendación empresarial.</td></tr>
+          </tbody>
+        </table>
+        <div class="callout" style="margin-top:12px">
+          <strong>Tip pedagógico:</strong> Puedes usar estas diapositivas como presentación interactiva en clase o grabar pantalla para convertirlas en evidencia de un video demostrativo.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pane" id="maqueta">
+    <div class="grid cols-2">
+      <div class="card">
+        <h2>Maqueta del entorno: feria escolar</h2>
+        <p>Haz clic en los puntos amarillos para descubrir información clave del negocio.</p>
+        <div class="hotspot-scene">
+          <div class="wall"></div>
+          <div class="banner">FERIA ESTUDIANTIL · EMPRENDE CON NÚMEROS</div>
+          <div class="stand"></div>
+          <div class="emoji">🥪</div>
+          <button class="hs" data-id="1">1</button>
+          <button class="hs" data-id="2">2</button>
+          <button class="hs" data-id="3">3</button>
+          <button class="hs" data-id="4">4</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Información del entorno</h2>
+        <div id="hotspotInfo" class="info-box">
+          <strong>Bienvenido.</strong><br>Selecciona un punto en la maqueta para conocer los elementos del emprendimiento y su relación con el punto de equilibrio.
+        </div>
+        <div class="callout" style="margin-top:14px">
+          <strong>Uso didáctico:</strong> esta maqueta ayuda a que el estudiante relacione el cálculo matemático con una situación concreta: precios, costos, unidades y decisiones del emprendimiento.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pane" id="simulador">
+    <div class="grid cols-2">
+      <div class="card">
+        <h2>Simulador del punto de equilibrio</h2>
+        <div class="field"><label for="fijos">Costos fijos <span id="fijosVal"></span></label><input id="fijos" type="range" min="10" max="300" step="5" value="60"></div>
+        <div class="field"><label for="precio">Precio de venta unitario <span id="precioVal"></span></label><input id="precio" type="range" min="1" max="8" step="0.25" value="3"></div>
+        <div class="field"><label for="variable">Costo variable unitario <span id="variableVal"></span></label><input id="variable" type="range" min="0.25" max="6" step="0.25" value="1.5"></div>
+        <div class="field"><label for="cantidad">Unidades previstas <span id="cantidadVal"></span></label><input id="cantidad" type="range" min="0" max="180" step="1" value="40"></div>
+        <div class="kpis">
+          <div class="kpi"><div class="label">Margen de contribución</div><div class="value" id="margenTxt"></div></div>
+          <div class="kpi"><div class="label">Punto de equilibrio</div><div class="value" id="peTxt"></div></div>
+          <div class="kpi"><div class="label">Ingresos</div><div class="value" id="ingresoTxt"></div></div>
+          <div class="kpi"><div class="label">Resultado</div><div class="value" id="resultadoTxt"></div></div>
+        </div>
+        <div class="status" id="interpretacion"></div>
+      </div>
+      <div class="card">
+        <h2>Gráfico de ingresos y costos</h2>
+        <svg id="chart" class="chart" viewBox="0 0 760 340" aria-label="Gráfico del punto de equilibrio"></svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="pane" id="visor">
+    <div class="grid cols-2">
+      <div class="card">
+        <h2>Visor de realidad aumentada</h2>
+        <p>El resultado del punto de equilibrio aparece superpuesto sobre una imagen del emprendimiento o sobre la cámara. Si la cámara no funciona, igual puedes usar la imagen integrada o cargar una foto propia.</p>
+        <div class="controls">
+          <button id="btnDemo">Usar imagen de demostración</button>
+          <button id="btnCamera" class="secondary">Activar cámara</button>
+          <button id="btnStop" class="danger">Desactivar cámara</button>
+          <label class="upload secondary">Cargar imagen <input type="file" id="fileInput" accept="image/*" hidden></label>
+        </div>
+        <div class="status" id="statusRA">Modo demostración activo. El panel aumentado ya se encuentra visible.</div>
+      </div>
+      <div class="card">
+        <div class="stage">
+          <img id="demoImage" alt="Emprendimiento escolar de sánduches">
+          <video id="cameraView" autoplay muted playsinline></video>
+          <div class="overlay">
+            <div class="hud">
+              <div class="pill">Realidad aumentada</div>
+              <div class="pill">Punto de equilibrio</div>
+              <div class="pill">Emprendimiento y Gestión</div>
+            </div>
+            <div class="panel">
+              <div class="eyebrow">Resultado principal</div>
+              <div class="big" id="raPE">40 unidades</div>
+              <div class="line" id="raLine1">Precio: $3,00 · Variable: $1,50</div>
+              <div class="line" id="raLine2">Costos fijos: $60,00</div>
+              <div class="line" id="raLine3">Con 40 unidades: equilibrio exacto</div>
+              <div class="line" id="raLine4">PE = 60 / (3,00 − 1,50) = 40</div>
+            </div>
+            <div class="tag t1" id="tagPrecio">Precio<br>$3,00</div>
+            <div class="tag t2" id="tagCosto">Costo variable<br>$1,50</div>
+            <div class="tag t3" id="tagFijo">Costos fijos<br>$60,00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pane" id="ia">
+    <div class="grid cols-2">
+      <div class="card">
+        <h2>Asesor inteligente del emprendimiento</h2>
+        <p>Este recurso actúa como un <strong>asistente de IA pedagógico</strong>: analiza los datos del negocio y genera recomendaciones comprensibles para el estudiante.</p>
+        <div class="field">
+          <label for="objetivo">Objetivo del estudiante</label>
+          <select id="objetivo">
+            <option value="ganar">Quiero obtener ganancia</option>
+            <option value="equilibrio">Quiero llegar al equilibrio sin perder</option>
+            <option value="mejorar">Quiero mejorar el precio o los costos</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="preguntaIA">Escribe una pregunta para el asesor</label>
+          <textarea id="preguntaIA" rows="5" placeholder="Ejemplo: ¿Qué me recomiendas si solo creo vender 30 sánduches?"></textarea>
+        </div>
+        <div class="controls"><button id="runIA">Analizar con IA</button></div>
+        <div class="ai-chat" style="margin-top:12px">
+          <div class="bubble user"><strong>Escenario actual</strong><br><span id="escenarioActual"></span></div>
+          <div class="bubble ai ai-output" id="salidaIA">Aquí aparecerá el análisis inteligente del escenario.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Qué hace este asesor</h2>
+        <ul>
+          <li>Explica si el negocio está en ganancia, pérdida o equilibrio.</li>
+          <li>Interpreta cuántas unidades faltan o sobran respecto al punto de equilibrio.</li>
+          <li>Sugiere acciones: subir precio, reducir costos o aumentar ventas.</li>
+          <li>Traduce el cálculo financiero a un lenguaje claro para Segundo BGU.</li>
+        </ul>
+        <div class="callout">
+          <strong>Enfoque de IA educativa:</strong> la “inteligencia” del recurso está en convertir datos numéricos en recomendaciones contextualizadas y comprensibles, simulando un apoyo tutorial al aprendizaje.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pane" id="storyboard">
+    <div class="card">
+      <h2>Storyboard y guion para video demostrativo</h2>
+      <p>Puedes usar estas escenas para grabar un video, armar una presentación en Genially o defender el prototipo en clase.</p>
+      <div class="storyboard">
+        <div class="scene"><div class="thumb"><div class="mini">🎬</div></div><div class="body"><strong>Escena 1. Presentación del problema</strong>Se introduce la feria escolar y la pregunta: “¿Cuántos sánduches debemos vender para no perder dinero?”</div></div>
+        <div class="scene"><div class="thumb"><div class="mini">🥪</div></div><div class="body"><strong>Escena 2. Caso base</strong>Se muestran los datos: costos fijos $60, costo variable $1,50 y precio de venta $3,00.</div></div>
+        <div class="scene"><div class="thumb"><div class="mini">📐</div></div><div class="body"><strong>Escena 3. Explicación de la fórmula</strong>Se explica el punto de equilibrio como una relación entre inversión fija y margen de contribución.</div></div>
+        <div class="scene"><div class="thumb"><div class="mini">🧪</div></div><div class="body"><strong>Escena 4. Simulación</strong>Se modifican los valores para comparar escenarios y descubrir qué pasa si sube o baja el precio.</div></div>
+        <div class="scene"><div class="thumb"><div class="mini">📱</div></div><div class="body"><strong>Escena 5. Visor aumentado</strong>El resultado aparece sobre la imagen del emprendimiento o en la cámara del dispositivo.</div></div>
+        <div class="scene"><div class="thumb"><div class="mini">🤖</div></div><div class="body"><strong>Escena 6. Recomendación final</strong>El asesor inteligente interpreta el resultado y propone una decisión razonada para el negocio.</div></div>
+      </div>
+      <div class="grid cols-2" style="margin-top:16px">
+        <div class="callout"><strong>Guion breve sugerido:</strong><br>“En este recurso analizamos un emprendimiento escolar de sánduches. Aprendimos que el punto de equilibrio indica cuántas unidades debemos vender para recuperar los costos. Con realidad aumentada visualizamos el resultado, con simulación lo comprobamos y con el asesor inteligente generamos recomendaciones para tomar mejores decisiones.”</div>
+        <div class="callout"><strong>Aplicación a Genially / FrameVR / Spatial:</strong><br>Este mismo contenido puede trasladarse a una sala virtual con estaciones: 1) presentación del caso, 2) fórmula, 3) simulador, 4) visor aumentado y 5) asesor inteligente.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-note">Prototipo integral de aprendizaje · Punto de equilibrio · Segundo BGU · Caso: emprendimiento escolar de sánduches</div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// Tabs
+const tabs = document.querySelectorAll('.tabs button');
+const panes = document.querySelectorAll('.pane');
+tabs.forEach(btn => btn.addEventListener('click', ()=>{
+  tabs.forEach(b=>b.classList.toggle('active', b===btn));
+  panes.forEach(p=>p.classList.toggle('active', p.id===btn.dataset.pane));
+}));
+
+// Slides
+const slides = [
+  {
+    title:'¿Qué es el punto de equilibrio?',
+    body:`<p>Es la cantidad de productos que un negocio debe vender para <strong>recuperar todos sus costos</strong>. En ese punto no existe ni ganancia ni pérdida.</p><ul><li>Si vendemos menos: hay pérdida.</li><li>Si vendemos exactamente lo necesario: hay equilibrio.</li><li>Si vendemos más: aparece la ganancia.</li></ul>`
+  },
+  {
+    title:'Elementos del caso de los sánduches',
+    body:`<p>En este emprendimiento escolar tenemos:</p><ul><li><strong>Costos fijos:</strong> $60</li><li><strong>Costo variable por sánduche:</strong> $1,50</li><li><strong>Precio de venta:</strong> $3,00</li></ul>`
+  },
+  {
+    title:'La fórmula del punto de equilibrio',
+    body:`<p><strong>PE = Costos fijos / (Precio de venta − Costo variable)</strong></p><p>Entonces: <strong>PE = 60 / (3,00 − 1,50) = 60 / 1,50 = 40 unidades</strong>.</p>`
+  },
+  {
+    title:'Interpretación del resultado',
+    body:`<p>Esto significa que el grupo necesita vender <strong>40 sánduches</strong> para recuperar su inversión. Si vende 30, pierde. Si vende 50, gana.</p>`
+  },
+  {
+    title:'Decidir con datos',
+    body:`<p>El punto de equilibrio ayuda a tomar decisiones responsables: revisar el precio, reducir costos o establecer metas de venta realistas.</p><p>Ahora explora la simulación, el visor RA y el asesor inteligente.</p>`
+  }
+];
+let slideIndex = 0;
+function renderSlide(){ $('slideNum').textContent = `Diapositiva ${slideIndex+1} de ${slides.length}`; $('slideTitle').textContent = slides[slideIndex].title; $('slideBody').innerHTML = slides[slideIndex].body; }
+$('prevSlide').addEventListener('click',()=>{ slideIndex = (slideIndex-1+slides.length)%slides.length; renderSlide(); });
+$('nextSlide').addEventListener('click',()=>{ slideIndex = (slideIndex+1)%slides.length; renderSlide(); });
+renderSlide();
+
+// Hotspots
+const hotspotData = {
+  1:'<strong>Puesto de venta.</strong><br>Representa el negocio dentro de la feria escolar. Aquí se vende el producto final: sánduches para el recreo o para un evento institucional.',
+  2:'<strong>Costos fijos.</strong><br>Incluyen gastos que no cambian aunque se vendan pocos o muchos sánduches, por ejemplo: decoración, transporte, alquiler simbólico del espacio o utensilios. En este caso: <strong>$60</strong>.',
+  3:'<strong>Costo variable.</strong><br>Es lo que se gasta por cada sánduche: pan, relleno, funda, servilleta, etc. En este caso: <strong>$1,50 por unidad</strong>.',
+  4:'<strong>Precio de venta.</strong><br>Es el valor que paga el cliente por cada sánduche. En este caso: <strong>$3,00</strong>. De esta diferencia con el costo variable sale el margen que permite cubrir los costos fijos.'
+};
+document.querySelectorAll('.hs').forEach(btn=>btn.addEventListener('click',()=>{ $('hotspotInfo').innerHTML = hotspotData[btn.dataset.id]; }));
+
+// Demo image embedded
+const demoSVG = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900">
+<defs>
+<linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#daf4fb"/><stop offset="100%" stop-color="#bfe6ef"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a55e34"/><stop offset="100%" stop-color="#70391f"/></linearGradient>
+</defs>
+<rect width="1400" height="900" fill="url(#g1)"/>
+<rect y="590" width="1400" height="310" fill="#dcd0b5"/>
+<rect x="180" y="120" width="1040" height="130" rx="18" fill="#0f5363"/>
+<text x="700" y="200" text-anchor="middle" font-size="60" font-family="Arial" fill="#fff" font-weight="700">FERIA ESCOLAR DE EMPRENDIMIENTO</text>
+<rect x="320" y="360" width="760" height="250" rx="22" fill="#f2b55b" stroke="#9d602e" stroke-width="18"/>
+<rect x="415" y="415" width="570" height="130" rx="10" fill="url(#wood)"/>
+<text x="700" y="480" text-anchor="middle" font-size="54" font-family="Arial" fill="#fff" font-weight="700">SÁNDUCHES</text>
+<text x="700" y="530" text-anchor="middle" font-size="36" font-family="Arial" fill="#ffeeb6">Emprendimiento estudiantil</text>
+<ellipse cx="700" cy="680" rx="290" ry="42" fill="#00000020"/>
+<text x="250" y="750" font-size="62">🥪</text>
+<text x="1110" y="760" font-size="62">💵</text>
+</svg>`;
+$('demoImage').src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(demoSVG);
+
+// Simulator state
+const state = {F:60,P:3,V:1.5,Q:40};
+const inputs = {
+  F:$('fijos'),P:$('precio'),V:$('variable'),Q:$('cantidad')
+};
+function money(n){ return '$' + Number(n).toFixed(2).replace('.',','); }
+function numComma(n, d=2){ return Number(n).toFixed(d).replace('.',','); }
+function compute(){
+  state.F = Number(inputs.F.value);
+  state.P = Number(inputs.P.value);
+  state.V = Number(inputs.V.value);
+  state.Q = Number(inputs.Q.value);
+  const margin = state.P - state.V;
+  const valid = margin > 0;
+  const pe = valid ? state.F / margin : null;
+  const peCeil = valid ? Math.ceil(pe) : null;
+  const revenue = state.P * state.Q;
+  const cost = state.F + state.V * state.Q;
+  const profit = revenue - cost;
+  return {margin, valid, pe, peCeil, revenue, cost, profit};
+}
+function renderChart(calc){
+  const svg = $('chart');
+  const maxX = Math.max(100, state.Q + 20, calc.valid ? Math.ceil(calc.pe)+18 : 0);
+  const maxY = Math.max(state.F + state.V * maxX, state.P * maxX, 20) * 1.18;
+  const sx = x => 70 + (x / maxX) * 650;
+  const sy = y => 280 - (y / maxY) * 220;
+  let marks='';
+  for(let i=0;i<=5;i++){
+    const yv = maxY/5 * i; const y = sy(yv);
+    marks += `<line x1="70" y1="${y}" x2="725" y2="${y}" stroke="#e2eef0"/>`;
+    marks += `<text x="10" y="${y+4}" font-size="12" fill="#5c7580">${money(yv)}</text>`;
+  }
+  for(let i=0;i<=5;i++){
+    const xv = Math.round(maxX/5 * i); const x=sx(xv);
+    marks += `<line x1="${x}" y1="280" x2="${x}" y2="50" stroke="#eef5f6"/>`;
+    marks += `<text x="${x-8}" y="302" font-size="12" fill="#5c7580">${xv}</text>`;
+  }
+  const ptsInc=[], ptsCost=[];
+  for(let i=0;i<=60;i++){
+    const x = maxX*i/60;
+    ptsInc.push(`${sx(x)},${sy(state.P*x)}`);
+    ptsCost.push(`${sx(x)},${sy(state.F + state.V*x)}`);
+  }
+  let peMark='';
+  if(calc.valid){
+    const x = calc.pe, y = state.P * calc.pe;
+    peMark = `<line x1="${sx(x)}" y1="280" x2="${sx(x)}" y2="${sy(y)}" stroke="#157f5b" stroke-dasharray="6 5"/>
+    <circle cx="${sx(x)}" cy="${sy(y)}" r="6" fill="#157f5b"/>
+    <text x="${Math.min(560,sx(x)+10)}" y="${Math.max(46,sy(y)-10)}" font-size="13" fill="#157f5b" font-weight="700">PE ≈ ${numComma(calc.pe)} uds.</text>`;
+  }
+  svg.innerHTML = `
+  <rect width="760" height="340" fill="#fbfefe" rx="18"/>
+  ${marks}
+  <line x1="70" y1="280" x2="725" y2="280" stroke="#48636e" stroke-width="1.5"/>
+  <line x1="70" y1="280" x2="70" y2="48" stroke="#48636e" stroke-width="1.5"/>
+  <polyline fill="none" stroke="#0a8b8b" stroke-width="4" points="${ptsInc.join(' ')}"/>
+  <polyline fill="none" stroke="#e0a231" stroke-width="4" points="${ptsCost.join(' ')}"/>
+  ${peMark}
+  <text x="125" y="36" font-size="14" fill="#0a8b8b" font-weight="700">Ingresos</text>
+  <text x="220" y="36" font-size="14" fill="#a46f13" font-weight="700">Costos totales</text>
+  <text x="580" y="318" font-size="12" fill="#5c7580">Unidades vendidas</text>`;
+}
+function updateAll(){
+  const c = compute();
+  $('fijosVal').textContent = money(state.F);
+  $('precioVal').textContent = money(state.P);
+  $('variableVal').textContent = money(state.V);
+  $('cantidadVal').textContent = state.Q + ' uds.';
+  $('margenTxt').textContent = c.valid ? money(c.margin) : 'Inválido';
+  $('peTxt').textContent = c.valid ? c.peCeil + ' uds.' : 'No existe';
+  $('ingresoTxt').textContent = money(c.revenue);
+  $('resultadoTxt').textContent = (c.profit >= 0 ? '+' : '-') + money(Math.abs(c.profit));
+
+  let interp='';
+  if(!c.valid){
+    interp = 'El precio de venta es menor o igual al costo variable. Así, el emprendimiento no puede cubrir los costos fijos. Se debe subir el precio o reducir el costo variable.';
+  } else if(c.profit < 0){
+    interp = `Con ${state.Q} unidades todavía existe una pérdida de ${money(Math.abs(c.profit))}. El negocio necesita llegar al menos a ${c.peCeil} unidades para no perder.`;
+  } else if(c.profit === 0){
+    interp = `Con ${state.Q} unidades el negocio se encuentra exactamente en equilibrio: no gana ni pierde.`;
+  } else {
+    interp = `Con ${state.Q} unidades el negocio supera el punto de equilibrio y obtiene una ganancia de ${money(c.profit)}.`;
+  }
+  $('interpretacion').textContent = interp;
+  renderChart(c);
+
+  // RA panel
+  $('raPE').textContent = c.valid ? `${c.peCeil} unidades` : 'No existe';
+  $('raLine1').textContent = `Precio: ${money(state.P)} · Variable: ${money(state.V)}`;
+  $('raLine2').textContent = `Costos fijos: ${money(state.F)}`;
+  $('raLine3').textContent = c.valid ? (c.profit<0 ? `Con ${state.Q} unidades: pérdida de ${money(Math.abs(c.profit))}` : c.profit>0 ? `Con ${state.Q} unidades: ganancia de ${money(c.profit)}` : `Con ${state.Q} unidades: equilibrio exacto`) : 'Debes corregir el precio o el costo variable';
+  $('raLine4').textContent = c.valid ? `PE = ${state.F} / (${numComma(state.P)} − ${numComma(state.V)}) = ${numComma(c.pe)}` : 'PE no válido';
+  $('tagPrecio').innerHTML = `Precio<br>${money(state.P)}`;
+  $('tagCosto').innerHTML = `Costo variable<br>${money(state.V)}`;
+  $('tagFijo').innerHTML = `Costos fijos<br>${money(state.F)}`;
+
+  // IA current scenario
+  $('escenarioActual').textContent = `Costos fijos ${money(state.F)}, costo variable ${money(state.V)}, precio de venta ${money(state.P)}, unidades previstas ${state.Q}. ${c.valid ? `Punto de equilibrio aproximado: ${c.peCeil} unidades.` : 'El punto de equilibrio no es válido con estos datos.'}`;
+}
+Object.values(inputs).forEach(el => el.addEventListener('input', updateAll));
+updateAll();
+
+// RA camera logic
+let stream = null;
+async function startCamera(){
+  if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){
+    $('statusRA').textContent = 'Tu navegador no permite usar la cámara en este contexto. Puedes seguir usando la imagen de demostración o cargar una imagen propia.';
+    return;
+  }
+  try{
+    stopCamera();
+    stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+    $('cameraView').srcObject = stream;
+    $('cameraView').style.display = 'block';
+    $('demoImage').style.display = 'none';
+    $('statusRA').textContent = 'Cámara activada correctamente. El resultado del punto de equilibrio está superpuesto sobre la vista en tiempo real.';
+  } catch(err){
+    $('cameraView').style.display = 'none';
+    $('demoImage').style.display = 'block';
+    $('statusRA').textContent = 'No se pudo activar la cámara (' + err.name + '). Se mantiene la imagen de demostración para que el recurso siga funcionando.';
+  }
+}
+function stopCamera(){
+  if(stream){ stream.getTracks().forEach(t=>t.stop()); stream = null; }
+  $('cameraView').srcObject = null;
+  $('cameraView').style.display = 'none';
+}
+$('btnDemo').addEventListener('click', ()=>{ stopCamera(); $('demoImage').style.display='block'; $('statusRA').textContent='Modo demostración activo. El panel aumentado ya se encuentra visible.'; });
+$('btnCamera').addEventListener('click', startCamera);
+$('btnStop').addEventListener('click', ()=>{ stopCamera(); $('demoImage').style.display='block'; $('statusRA').textContent='Cámara desactivada. Se vuelve a mostrar la imagen de demostración.'; });
+$('fileInput').addEventListener('change', e=>{
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  stopCamera();
+  const reader = new FileReader();
+  reader.onload = ev => { $('demoImage').src = ev.target.result; $('demoImage').style.display='block'; $('statusRA').textContent='Imagen cargada correctamente. El resultado del punto de equilibrio se muestra ahora sobre tu propia imagen.'; };
+  reader.readAsDataURL(file);
+});
+
+// AI advisor
+$('runIA').addEventListener('click', ()=>{
+  const c = compute();
+  const q = ($('preguntaIA').value || '').trim();
+  const obj = $('objetivo').value;
+  const gap = c.valid ? state.Q - c.peCeil : null;
+  let parts = [];
+  parts.push(`<strong>Análisis del escenario:</strong> Actualmente el negocio tiene costos fijos de ${money(state.F)}, un costo variable de ${money(state.V)} y un precio de venta de ${money(state.P)}.`);
+  if(!c.valid){
+    parts.push(`Con estos valores, el margen de contribución no es positivo. Eso significa que <strong>cada venta no está ayudando a cubrir los costos fijos</strong>. En términos simples: vender más no resolverá el problema mientras el precio siga siendo demasiado bajo o el costo variable demasiado alto.`);
+    parts.push(`<strong>Recomendación de IA:</strong> sube el precio de venta por encima de ${money(state.V)} y procura mantener un margen cómodo. También puedes buscar insumos más económicos o mejorar el tamaño del lote de compra.`);
+  } else {
+    parts.push(`El punto de equilibrio aproximado es de <strong>${c.peCeil} unidades</strong>.`);
+    if(c.profit < 0){
+      parts.push(`Si solo se venden ${state.Q} unidades, el negocio tendría una pérdida de <strong>${money(Math.abs(c.profit))}</strong>. Todavía faltan <strong>${Math.max(0,c.peCeil-state.Q)} unidades</strong> para llegar al equilibrio.`);
+    } else if(c.profit === 0){
+      parts.push(`Con ${state.Q} unidades, el negocio está exactamente en equilibrio. Es un buen punto de referencia, pero todavía no existe utilidad.`);
+    } else {
+      parts.push(`Con ${state.Q} unidades, el negocio ya supera el equilibrio y obtiene una ganancia de <strong>${money(c.profit)}</strong>. Eso muestra que la meta de ventas es suficiente para sostener la actividad.`);
+    }
+    if(obj === 'ganar'){
+      parts.push(`<strong>Enfoque según tu objetivo:</strong> Como quieres obtener ganancia, conviene fijar una meta de ventas por encima de ${c.peCeil} unidades. También puedes evaluar un pequeño ajuste del precio si el mercado lo soporta.`);
+    } else if(obj === 'equilibrio'){
+      parts.push(`<strong>Enfoque según tu objetivo:</strong> Si tu meta es no perder, entonces necesitas asegurar por lo menos ${c.peCeil} ventas. Esa es la referencia mínima para organizar la producción.`);
+    } else {
+      parts.push(`<strong>Enfoque según tu objetivo:</strong> Si deseas mejorar el negocio, analiza si puedes reducir el costo variable o aumentar ligeramente el precio, porque ambas acciones reducen el punto de equilibrio.`);
+    }
+    if(state.P - state.V < 1){
+      parts.push(`Observación adicional: el margen por unidad es bajo (${money(c.margin)}). Eso vuelve más lento el proceso de recuperación de la inversión.`);
+    } else if(state.P - state.V >= 2){
+      parts.push(`Observación adicional: el margen por unidad es amplio (${money(c.margin)}), por lo que el negocio recupera más rápido sus costos fijos.`);
+    }
+  }
+  if(q){
+    parts.push(`<strong>Respuesta a tu pregunta:</strong> “${q}”. En relación con esa inquietud, la recomendación es comparar las ventas previstas con el punto de equilibrio y tomar una decisión concreta sobre precio, costos y volumen de producción.`);
+  }
+  parts.push(`<strong>Conclusión de IA:</strong> El punto de equilibrio no es solo un cálculo; es una herramienta para decidir con mayor seguridad cuánto producir, cuánto vender y si un pequeño emprendimiento realmente es viable.`);
+  $('salidaIA').innerHTML = parts.join('<br><br>');
+});
+</script>
+</body>
+</html>
